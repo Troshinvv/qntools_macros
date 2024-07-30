@@ -5,14 +5,6 @@ vector <vector<string>> u1_rescaled_Q1_rescaled=
   {"proton_RESCALED", "F1_RESCALED"},
   {"proton_RESCALED", "F2_RESCALED"},
   {"proton_RESCALED", "F3_RESCALED"},
-
-  {"proton_400_RESCALED", "F1_RESCALED"},
-  {"proton_400_RESCALED", "F2_RESCALED"},
-  {"proton_400_RESCALED", "F3_RESCALED"},
-  
-  {"proton_700_RESCALED", "F1_RESCALED"},
-  {"proton_700_RESCALED", "F2_RESCALED"},
-  {"proton_700_RESCALED", "F3_RESCALED"},
 };
 
 vector <vector<string>> Q1_rescaled_Q1_rescaled =
@@ -110,10 +102,10 @@ namespace P4{
   }
 
 }
-void run8_proton_correlate(string inputFiles="qn.root", string outputFile="corr.root")
+void run8_proton_correlate_clean(string inputFiles="qn.root", string outputFile="corr.root")
 {
   int nSamples = 100;
-  Qn::AxisD centAxis({"centrality", 4, 0, 40});
+  Qn::AxisD centAxis({"centrality", 8, 0, 40});
   auto axes_correlation = Qn::MakeAxes(centAxis);
   ROOT::RDataFrame d( "tree", inputFiles.c_str() );
   auto d_samples = Qn::Correlation::Resample(d, nSamples);

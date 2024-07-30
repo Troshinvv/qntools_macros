@@ -4,6 +4,7 @@
 
 #include "vector_config.h"
 
+#include <type_traits>
 #include <utility>
 
 VectorConfig::VectorConfig(std::string name, std::string phi_field, std::string weight_field,
@@ -36,14 +37,21 @@ void VectorConfig::Decorate(const std::shared_ptr<Qn::CorrectionManager>& man) c
 
   auto plain=Qn::QVector::CorrectionStep::PLAIN;
   auto recentered=Qn::QVector::CorrectionStep::RECENTERED;
+  auto twist=Qn::QVector::CorrectionStep::TWIST;
   auto rescaled=Qn::QVector::CorrectionStep::RESCALED;
 
   Qn::Recentering recentering;
-  recentering.SetApplyWidthEqualization(false);
+  recentering.SetApplyWidthEqualization(recentering_width_equalization_);
 
   Qn::TwistAndRescale twistRescale;
-  twistRescale.SetApplyRescale(true);
-  twistRescale.SetTwistAndRescaleMethod(Qn::TwistAndRescale::Method::DOUBLE_HARMONIC);
+  twistRescale.SetApplyRescale(apply_rescaling_);
+  twistRescale.SetApplyTwist(apply_twist_);
+  if( twis_rescaling_method_ == TWIST_RESCALING_METHOD::DOUBLE_HARMONIC )
+    twistRescale.SetTwistAndRescaleMethod(Qn::TwistAndRescale::Method::DOUBLE_HARMONIC);
+  else{
+    twistRescale.SetTwistAndRescaleMethod(Qn::TwistAndRescale::Method::CORRELATIONS );
+    twistRescale.SetReferenceConfigurationsForTwistAndRescale( twist_rescaling_reference_.at(0), twist_rescaling_reference_.at(1) );
+  }
 
   std::bitset<Qn::QVector::kmaxharmonics> harmonics_bitset{};
   for (int harm : harmonic_array_) {
@@ -65,8 +73,9 @@ void VectorConfig::Decorate(const std::shared_ptr<Qn::CorrectionManager>& man) c
       man->AddCorrectionOnQnVector( name_, recentering );
       correction_output.push_back( recentered );
     }
-    if( corr == CORRECTION::RESCALING ){
+    if( corr == CORRECTION::TWIST_RESCALING ){
       man->AddCorrectionOnQnVector( name_, twistRescale );
+      correction_output.push_back( twist );
       correction_output.push_back( rescaled );
     }
   }
