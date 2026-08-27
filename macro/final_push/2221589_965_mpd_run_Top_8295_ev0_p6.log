@@ -1,0 +1,231 @@
+bmnroot path: /cvmfs/bmn.jinr.ru/bmnroot/25.09.0/x86_64-centos7/bmnroot_config.sh
+Node name: ncx114
+Job ID: 2221589
+Task ID: 965
+line: 965
+name: mpd_run_Top_8295_ev0_p6
+input digi: /eos/nica/bmn/exp/digi/run8/25.09.0/mpd_run_Top_8295_ev0_p6.root
+input dst: /eos/nica/bmn/exp/dst/run8/25.09.0/mpd_run_Top_8295_ev0_p6.root
+output tree: /nica/mpd1/demanov/data_bmn/run8_vf_25.09_test/mpd_run_Top_8295_ev0_p6.tree.root
+calib file 1: /nica/mpd1/demanov/convert/convert_run8_25.09/run8_dedx_calibR_coeff.root
+calib file 2: /nica/mpd1/demanov/convert/convert_run8_25.09/run8_dedx_calibS_coeff.root
+pid file 1: /nica/mpd1/demanov/convert/convert_run8_25.09/pars400_25.04.root
+pid file 2: /nica/mpd1/demanov/convert/convert_run8_25.09/pars700_25.04.root
+Vtx XYZ corr file: /nica/mpd1/demanov/convert/convert_run8_25.09/run8_25.09_corr_VtxXYZ.root
+BC1 FD corr file: /nica/mpd1/demanov/convert/convert_run8_25.09/run8_25.09_corr_bc1fd.root
+TOF corr file: /nica/mpd1/demanov/convert/convert_run8_25.09/tof_time_shift_calib_230726.root
+output log: /nica/mpd1/demanov/data_bmn/run8_vf_25.09_test/log/2221589_965_mpd_run_Top_8295_ev0_p6.log
+
+Processing /nica/mpd1/demanov/convert/convert_run8_25.09/convertBmn_run8.C("/eos/nica/bmn/exp/dst/run8/25.09.0/mpd_run_Top_8295_ev0_p6.root", "/eos/nica/bmn/exp/digi/run8/25.09.0/mpd_run_Top_8295_ev0_p6.root","/nica/mpd1/demanov/convert/convert_run8_25.09/run8_dedx_calibR_coeff.root","/nica/mpd1/demanov/convert/convert_run8_25.09/run8_dedx_calibS_coeff.root","/nica/mpd1/demanov/data_bmn/run8_vf_25.09_test/mpd_run_Top_8295_ev0_p6.tree.root","/nica/mpd1/demanov/convert/convert_run8_25.09/pars400_25.04.root","/nica/mpd1/demanov/convert/convert_run8_25.09/pars700_25.04.root","/nica/mpd1/demanov/convert/convert_run8_25.09/run8_25.09_corr_VtxXYZ.root","/nica/mpd1/demanov/convert/convert_run8_25.09/run8_25.09_corr_bc1fd.root","/nica/mpd1/demanov/convert/convert_run8_25.09/tof_time_shift_calib_230726.root")...
+Adding files to chain:
+OBJ: TChain	bmndata	 : 0 at: 0x19492c40
+ /eos/nica/bmn/exp/dst/run8/25.09.0/mpd_run_Top_8295_ev0_p6.roottree:bmndata entries=<not calculated>
+Adding files to chain:
+OBJ: TChain	bmndata	 : 0 at: 0x17274c10
+ /eos/nica/bmn/exp/digi/run8/25.09.0/mpd_run_Top_8295_ev0_p6.roottree:bmndata entries=<not calculated>
+Warning in <TStreamerInfo::Build>: chrono::time_point<chrono::system_clock,chrono::duration<long,ratio<1,1000000000> > >: chrono::duration<long,ratio<1,1000000000> > has no streamer or dictionary, data member "__d" will not be saved
+Warning in <TStreamerInfo::Build>: BmnSpillInfo: chrono::time_point<chrono::system_clock,chrono::duration<long,ratio<1,1000000000> > > has no streamer or dictionary, data member "start_ts" will not be saved
+Warning in <TStreamerInfo::Build>: BmnSpillInfo: chrono::time_point<chrono::system_clock,chrono::duration<long,ratio<1,1000000000> > > has no streamer or dictionary, data member "stop_ts" will not be saved
+
+|||||||||||||||| RUN SUMMARY |||||||||||||||
+||					  ||
+||   Period:        8			  ||
+||   Number:        8295		  ||
+||   Start Time:    2023-01-30 01:53:35	  ||
+||   End Time:      2023-01-30 02:26:53	  ||
+||   Beam:          A = -1, Z = -1	  ||
+||   Beam energy:   3.8 GeV		  ||
+||   Target:        A = -1, Z = -1	  ||
+||					  ||
+||||||||||||||||||||||||||||||||||||||||||||
+
+[INFO] Extrapolated magnetic field map is used
+[INFO] BmnFieldMap: Reading field map from ROOT file /cvmfs/bmn.jinr.ru/bmnroot/25.09.0/x86_64-centos7/input/FieldMap_1900_extrap_noPed.root
+Info in <TGeoManager::Import>: Reading geometry from file: current_geo_file_-1195397498.root
+Info in <TGeoManager::CloseGeometry>: Geometry loaded from file...
+Info in <TGeoManager::SetTopVolume>: Top volume is cave. Master volume is cave
+Info in <TGeoNavigator::BuildCache>: --- Maximum geometry depth set to 100
+Info in <TGeoManager::Voxelize>: Voxelizing...
+Info in <TGeoManager::CountLevels>: max level = 6, max placements = 170
+Info in <TGeoManager::CloseGeometry>: 27131 nodes/ 1096 volume UID's in FAIR geometry
+Info in <TGeoManager::CloseGeometry>: ----------------modeler ready----------------
+Info in <TGeoManager::Import>: Reading geometry from file: current_geo_file_-1195397498.root
+Info in <TGeoManager::CloseGeometry>: Geometry loaded from file...
+Info in <TGeoManager::SetTopVolume>: Top volume is cave. Master volume is cave
+Info in <TGeoManager::Voxelize>: Voxelizing...
+Info in <TGeoManager::CountLevels>: max level = 6, max placements = 170
+Info in <TGeoManager::CloseGeometry>: 27131 nodes/ 1096 volume UID's in FAIR geometry
+Info in <TGeoManager::CloseGeometry>: ----------------modeler ready----------------
+Info in <TGeoManager::Import>: Reading geometry from file: current_geo_file_-1195397498.root
+Info in <TGeoManager::CloseGeometry>: Geometry loaded from file...
+Info in <TGeoManager::SetTopVolume>: Top volume is cave. Master volume is cave
+Info in <TGeoManager::Voxelize>: Voxelizing...
+Info in <TGeoManager::CountLevels>: max level = 6, max placements = 170
+Info in <TGeoManager::CloseGeometry>: 27131 nodes/ 1096 volume UID's in FAIR geometry
+Info in <TGeoManager::CloseGeometry>: ----------------modeler ready----------------
+Reading scwall geometry from geometry file
+scwall node name: scwall01_1
+Reading hodo geometry from geometry file
+hodo node name: hodo01_1
+Reading fhcal geometry from geometry file
+fhcal node name: fhcal01_1
+reading PID function from file (TOF400)
+reading PID function from file (TOF700)
+
+Branch: BmnBC1hitInfo_FDamp                     Type: int                                                | Compressed: 51.17      KB | % of file: 0.02  %
+Branch: BmnBC1hitInfo_nBD                       Type: int                                                | Compressed: 25.78      KB | % of file: 0.01  %
+Branch: bc1sAmplitude                           Type: float                                              | Compressed: 57.90      KB | % of file: 0.02  %
+Branch: bc1sIntegral                            Type: float                                              | Compressed: 72.48      KB | % of file: 0.02  %
+Branch: bc1sIntegral_nSigma                     Type: float                                              | Compressed: 90.83      KB | % of file: 0.03  %
+Branch: bc1sTdcTimes                            Type: ROOT::VecOps::RVec<float>                          | Compressed: 254.12     KB | % of file: 0.08  %
+Branch: bc2asAmplitude                          Type: float                                              | Compressed: 55.00      KB | % of file: 0.02  %
+Branch: bc2asIntegral                           Type: float                                              | Compressed: 66.53      KB | % of file: 0.02  %
+Branch: bc2asTdcTimes                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 246.78     KB | % of file: 0.07  %
+Branch: bc2msAmplitude                          Type: float                                              | Compressed: 55.90      KB | % of file: 0.02  %
+Branch: bc2msIntegral                           Type: float                                              | Compressed: 69.05      KB | % of file: 0.02  %
+Branch: bc2msTdcTimes                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 246.48     KB | % of file: 0.07  %
+Branch: bdModAmp                                Type: ROOT::VecOps::RVec<float>                          | Compressed: 1074.46    KB | % of file: 0.32  %
+Branch: bdModId                                 Type: ROOT::VecOps::RVec<short>                          | Compressed: 353.41     KB | % of file: 0.10  %
+Branch: bdMult                                  Type: unsigned int                                       | Compressed: 26.84      KB | % of file: 0.01  %
+Branch: bdTrigTime                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 1101.64    KB | % of file: 0.33  %
+Branch: beamHitIndex                            Type: ROOT::VecOps::RVec<int>                            | Compressed: 125.80     KB | % of file: 0.04  %
+Branch: beamHitStation                          Type: ROOT::VecOps::RVec<int>                            | Compressed: 154.69     KB | % of file: 0.05  %
+Branch: beamHitX                                Type: ROOT::VecOps::RVec<float>                          | Compressed: 717.99     KB | % of file: 0.21  %
+Branch: beamHitY                                Type: ROOT::VecOps::RVec<float>                          | Compressed: 718.05     KB | % of file: 0.21  %
+Branch: beamHitZ                                Type: ROOT::VecOps::RVec<float>                          | Compressed: 153.00     KB | % of file: 0.05  %
+Branch: beamTrackB                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 213.51     KB | % of file: 0.06  %
+Branch: beamTrackChi2                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 218.96     KB | % of file: 0.06  %
+Branch: beamTrackNDF                            Type: ROOT::VecOps::RVec<int>                            | Compressed: 89.41      KB | % of file: 0.03  %
+Branch: beamTrackParameters                     Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 645.69     KB | % of file: 0.19  %
+Branch: centralHitClass                         Type: int                                                | Compressed: 11.03      KB | % of file: 0.00  %
+Branch: centralHitIndex                         Type: int                                                | Compressed: 13.91      KB | % of file: 0.00  %
+Branch: evtId                                   Type: unsigned int                                       | Compressed: 32.98      KB | % of file: 0.01  %
+Branch: fdAmplitude                             Type: float                                              | Compressed: 59.95      KB | % of file: 0.02  %
+Branch: fdIntegral                              Type: float                                              | Compressed: 73.38      KB | % of file: 0.02  %
+Branch: fdIntegral_nSigma                       Type: float                                              | Compressed: 90.36      KB | % of file: 0.03  %
+Branch: fdTdcTimes                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 215.08     KB | % of file: 0.06  %
+Branch: fhcalModE                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 4154.20    KB | % of file: 1.23  %
+Branch: fhcalModId                              Type: ROOT::VecOps::RVec<int>                            | Compressed: 129.43     KB | % of file: 0.04  %
+Branch: fhcalModPos                             Type: vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> > | Compressed: 31.76      KB | % of file: 0.01  %
+Branch: fhcalSecE                               Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 20158.82   KB | % of file: 5.95  %
+Branch: fhcalSumE                               Type: float                                              | Compressed: 83.14      KB | % of file: 0.02  %
+Branch: fsdDigits                               Type: ROOT::VecOps::RVec<unsigned int>                   | Compressed: 546.67     KB | % of file: 0.16  %
+Branch: fsdMultHits                             Type: int                                                | Compressed: 45.83      KB | % of file: 0.01  %
+Branch: gemDigits                               Type: ROOT::VecOps::RVec<unsigned int>                   | Compressed: 1148.32    KB | % of file: 0.34  %
+Branch: gemMultHits                             Type: int                                                | Compressed: 50.74      KB | % of file: 0.01  %
+Branch: globalTrackCovMatrix                    Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 51755.72   KB | % of file: 15.28 %
+Branch: globalTrackParameters                   Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 18626.65   KB | % of file: 5.50  %
+Branch: hodoModId                               Type: ROOT::VecOps::RVec<int>                            | Compressed: 65.88      KB | % of file: 0.02  %
+Branch: hodoModPos                              Type: vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> > | Compressed: 31.75      KB | % of file: 0.01  %
+Branch: hodoStripQ                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 268.77     KB | % of file: 0.08  %
+Branch: hodoSumQ                                Type: float                                              | Compressed: 57.19      KB | % of file: 0.02  %
+Branch: k0closest                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 113.49     KB | % of file: 0.03  %
+Branch: k0cut                                   Type: bool                                               | Compressed: 4.34       KB | % of file: 0.00  %
+Branch: k1central                               Type: int                                                | Compressed: 10.04      KB | % of file: 0.00  %
+Branch: k1closest                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 44.70      KB | % of file: 0.01  %
+Branch: k1cut                                   Type: bool                                               | Compressed: 1.73       KB | % of file: 0.00  %
+Branch: kV0closest                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 90.11      KB | % of file: 0.03  %
+Branch: kV0cut                                  Type: bool                                               | Compressed: 5.32       KB | % of file: 0.00  %
+Branch: kV1closest                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 55.83      KB | % of file: 0.02  %
+Branch: kV1cut                                  Type: bool                                               | Compressed: 3.54       KB | % of file: 0.00  %
+Branch: noPileup                                Type: int                                                | Compressed: 10.97      KB | % of file: 0.00  %
+Branch: runId                                   Type: unsigned int                                       | Compressed: 1.70       KB | % of file: 0.00  %
+Branch: scwallModId                             Type: ROOT::VecOps::RVec<int>                            | Compressed: 334.10     KB | % of file: 0.10  %
+Branch: scwallModPos                            Type: vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> > | Compressed: 31.74      KB | % of file: 0.01  %
+Branch: scwallModQ                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 4528.30    KB | % of file: 1.34  %
+Branch: siMDMult                                Type: unsigned int                                       | Compressed: 1.64       KB | % of file: 0.00  %
+Branch: sibtMultHits                            Type: int                                                | Compressed: 22.49      KB | % of file: 0.01  %
+Branch: singleIon                               Type: bool                                               | Compressed: 6.39       KB | % of file: 0.00  %
+Branch: stsTrackChi2Ndf                         Type: ROOT::VecOps::RVec<float>                          | Compressed: 3305.42    KB | % of file: 0.98  %
+Branch: stsTrackCovMatrix                       Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 51240.79   KB | % of file: 15.13 %
+Branch: stsTrackMagField                        Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 31498.86   KB | % of file: 9.30  %
+Branch: stsTrackMomentum                        Type: vector<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiE4D<double> > > | Compressed: 67.50      KB | % of file: 0.02  %
+Branch: stsTrackNdf                             Type: ROOT::VecOps::RVec<int>                            | Compressed: 515.05     KB | % of file: 0.15  %
+Branch: stsTrackNhits                           Type: ROOT::VecOps::RVec<int>                            | Compressed: 516.40     KB | % of file: 0.15  %
+Branch: stsTrackParameters                      Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 19608.43   KB | % of file: 5.79  %
+Branch: tof400Digits                            Type: ROOT::VecOps::RVec<unsigned int>                   | Compressed: 220.42     KB | % of file: 0.07  %
+Branch: tof400MultHits                          Type: int                                                | Compressed: 29.39      KB | % of file: 0.01  %
+Branch: tof400hitRefIndex                       Type: ROOT::VecOps::RVec<int>                            | Compressed: 986.40     KB | % of file: 0.29  %
+Branch: tof400hitResX                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 502.56     KB | % of file: 0.15  %
+Branch: tof400hitResY                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 502.07     KB | % of file: 0.15  %
+Branch: tof700Digits                            Type: ROOT::VecOps::RVec<unsigned int>                   | Compressed: 365.58     KB | % of file: 0.11  %
+Branch: tof700MultHits                          Type: int                                                | Compressed: 35.24      KB | % of file: 0.01  %
+Branch: tof700hitRefIndex                       Type: ROOT::VecOps::RVec<int>                            | Compressed: 4104.59    KB | % of file: 1.21  %
+Branch: tof700hitResX                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 1302.79    KB | % of file: 0.38  %
+Branch: tof700hitResY                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 1303.12    KB | % of file: 0.38  %
+Branch: trB_FakeTrPar                           Type: ROOT::VecOps::RVec<float>                          | Compressed: 2323.80    KB | % of file: 0.69  %
+Branch: trBetaTof400                            Type: ROOT::VecOps::RVec<float>                          | Compressed: 541.02     KB | % of file: 0.16  %
+Branch: trBetaTof400_corr                       Type: ROOT::VecOps::RVec<float>                          | Compressed: 541.25     KB | % of file: 0.16  %
+Branch: trBetaTof700                            Type: ROOT::VecOps::RVec<float>                          | Compressed: 1078.02    KB | % of file: 0.32  %
+Branch: trBetaTof700_corr                       Type: ROOT::VecOps::RVec<float>                          | Compressed: 1078.45    KB | % of file: 0.32  %
+Branch: trCharge                                Type: ROOT::VecOps::RVec<short>                          | Compressed: 401.36     KB | % of file: 0.12  %
+Branch: trChi2                                  Type: ROOT::VecOps::RVec<float>                          | Compressed: 3325.64    KB | % of file: 0.98  %
+Branch: trChi2Ndf                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 3305.13    KB | % of file: 0.98  %
+Branch: trChi2vtx                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 3415.81    KB | % of file: 1.01  %
+Branch: trDcaR                                  Type: ROOT::VecOps::RVec<float>                          | Compressed: 3376.82    KB | % of file: 1.00  %
+Branch: trDcaX                                  Type: ROOT::VecOps::RVec<float>                          | Compressed: 3433.11    KB | % of file: 1.01  %
+Branch: trDcaY                                  Type: ROOT::VecOps::RVec<float>                          | Compressed: 3426.06    KB | % of file: 1.01  %
+Branch: trDcaZ                                  Type: ROOT::VecOps::RVec<float>                          | Compressed: 206.49     KB | % of file: 0.06  %
+Branch: trEnergyLoss                            Type: ROOT::VecOps::RVec<float>                          | Compressed: 2211.53    KB | % of file: 0.65  %
+Branch: trEta                                   Type: ROOT::VecOps::RVec<float>                          | Compressed: 3227.51    KB | % of file: 0.95  %
+Branch: trGlobalTof400StripNumber_toTr          Type: ROOT::VecOps::RVec<int>                            | Compressed: 477.71     KB | % of file: 0.14  %
+Branch: trGlobalTof700StripNumber_toTr          Type: ROOT::VecOps::RVec<int>                            | Compressed: 877.64     KB | % of file: 0.26  %
+Branch: trLength                                Type: ROOT::VecOps::RVec<float>                          | Compressed: 3235.22    KB | % of file: 0.96  %
+Branch: trM2Tof400                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 556.00     KB | % of file: 0.16  %
+Branch: trM2Tof400_corr                         Type: ROOT::VecOps::RVec<float>                          | Compressed: 556.06     KB | % of file: 0.16  %
+Branch: trM2Tof700                              Type: ROOT::VecOps::RVec<float>                          | Compressed: 1119.99    KB | % of file: 0.33  %
+Branch: trM2Tof700_corr                         Type: ROOT::VecOps::RVec<float>                          | Compressed: 1120.94    KB | % of file: 0.33  %
+Branch: trNdf                                   Type: ROOT::VecOps::RVec<int>                            | Compressed: 514.98     KB | % of file: 0.15  %
+Branch: trNhits                                 Type: ROOT::VecOps::RVec<int>                            | Compressed: 653.78     KB | % of file: 0.19  %
+Branch: trNsigma_1000010020_400                 Type: ROOT::VecOps::RVec<float>                          | Compressed: 487.63     KB | % of file: 0.14  %
+Branch: trNsigma_1000010020_700                 Type: ROOT::VecOps::RVec<float>                          | Compressed: 1104.11    KB | % of file: 0.33  %
+Branch: trNsigma_211_400                        Type: ROOT::VecOps::RVec<float>                          | Compressed: 494.21     KB | % of file: 0.15  %
+Branch: trNsigma_211_700                        Type: ROOT::VecOps::RVec<float>                          | Compressed: 1039.19    KB | % of file: 0.31  %
+Branch: trNsigma_211_700_proto                  Type: ROOT::VecOps::RVec<float>                          | Compressed: 851.53     KB | % of file: 0.25  %
+Branch: trNsigma_2212_400                       Type: ROOT::VecOps::RVec<float>                          | Compressed: 498.09     KB | % of file: 0.15  %
+Branch: trNsigma_2212_700                       Type: ROOT::VecOps::RVec<float>                          | Compressed: 1123.04    KB | % of file: 0.33  %
+Branch: trP                                     Type: ROOT::VecOps::RVec<float>                          | Compressed: 3306.82    KB | % of file: 0.98  %
+Branch: trParamLast                             Type: ROOT::VecOps::RVec<ROOT::VecOps::RVec<float> >     | Compressed: 20151.01   KB | % of file: 5.95  %
+Branch: trPhi                                   Type: ROOT::VecOps::RVec<float>                          | Compressed: 3386.00    KB | % of file: 1.00  %
+Branch: trPq                                    Type: ROOT::VecOps::RVec<float>                          | Compressed: 3360.22    KB | % of file: 0.99  %
+Branch: trPt                                    Type: ROOT::VecOps::RVec<float>                          | Compressed: 3291.13    KB | % of file: 0.97  %
+Branch: trTof400L                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 537.43     KB | % of file: 0.16  %
+Branch: trTof400Plane                           Type: ROOT::VecOps::RVec<int>                            | Compressed: 432.51     KB | % of file: 0.13  %
+Branch: trTof400Strip                           Type: ROOT::VecOps::RVec<int>                            | Compressed: 451.77     KB | % of file: 0.13  %
+Branch: trTof400hit                             Type: ROOT::VecOps::RVec<int>                            | Compressed: 450.35     KB | % of file: 0.13  %
+Branch: trTof400hitT                            Type: ROOT::VecOps::RVec<float>                          | Compressed: 542.09     KB | % of file: 0.16  %
+Branch: trTof400hitT_corr                       Type: ROOT::VecOps::RVec<float>                          | Compressed: 542.14     KB | % of file: 0.16  %
+Branch: trTof700L                               Type: ROOT::VecOps::RVec<float>                          | Compressed: 1061.95    KB | % of file: 0.31  %
+Branch: trTof700Plane                           Type: ROOT::VecOps::RVec<int>                            | Compressed: 760.13     KB | % of file: 0.22  %
+Branch: trTof700Strip                           Type: ROOT::VecOps::RVec<int>                            | Compressed: 729.80     KB | % of file: 0.22  %
+Branch: trTof700hit                             Type: ROOT::VecOps::RVec<int>                            | Compressed: 797.30     KB | % of file: 0.24  %
+Branch: trTof700hitT                            Type: ROOT::VecOps::RVec<float>                          | Compressed: 1080.37    KB | % of file: 0.32  %
+Branch: trTof700hitT_corr                       Type: ROOT::VecOps::RVec<float>                          | Compressed: 1081.08    KB | % of file: 0.32  %
+Branch: track_multiplicity                      Type: unsigned long                                      | Compressed: 36.58      KB | % of file: 0.01  %
+Branch: track_multiplicity_M                    Type: unsigned long                                      | Compressed: 29.28      KB | % of file: 0.01  %
+Branch: track_multiplicity_gt                   Type: unsigned long                                      | Compressed: 30.57      KB | % of file: 0.01  %
+Branch: track_multiplicity_gt_woFakeTr          Type: unsigned long                                      | Compressed: 30.11      KB | % of file: 0.01  %
+Branch: triggerMapAR                            Type: unsigned int                                       | Compressed: 14.42      KB | % of file: 0.00  %
+Branch: triggerMapBR                            Type: unsigned int                                       | Compressed: 12.87      KB | % of file: 0.00  %
+Branch: vcsAmplitude                            Type: float                                              | Compressed: 51.82      KB | % of file: 0.02  %
+Branch: vcsIntegral                             Type: float                                              | Compressed: 67.42      KB | % of file: 0.02  %
+Branch: vcsTdcTimes                             Type: ROOT::VecOps::RVec<float>                          | Compressed: 109.68     KB | % of file: 0.03  %
+Branch: vtxChi2                                 Type: float                                              | Compressed: 69.80      KB | % of file: 0.02  %
+Branch: vtxChi2Ndf                              Type: float                                              | Compressed: 67.62      KB | % of file: 0.02  %
+Branch: vtxNdf                                  Type: int                                                | Compressed: 30.43      KB | % of file: 0.01  %
+Branch: vtxNtracks                              Type: int                                                | Compressed: 29.43      KB | % of file: 0.01  %
+Branch: vtxR                                    Type: float                                              | Compressed: 73.59      KB | % of file: 0.02  %
+Branch: vtxRcorr                                Type: float                                              | Compressed: 76.38      KB | % of file: 0.02  %
+Branch: vtxX                                    Type: float                                              | Compressed: 74.46      KB | % of file: 0.02  %
+Branch: vtxXcorr                                Type: float                                              | Compressed: 74.80      KB | % of file: 0.02  %
+Branch: vtxY                                    Type: float                                              | Compressed: 74.72      KB | % of file: 0.02  %
+Branch: vtxYcorr                                Type: float                                              | Compressed: 74.50      KB | % of file: 0.02  %
+Branch: vtxZ                                    Type: float                                              | Compressed: 72.21      KB | % of file: 0.02  %
+Branch: vtxZcorr                                Type: float                                              | Compressed: 72.23      KB | % of file: 0.02  %
+
+Total file size: 330.82 MB
+
+Total file size: 308.25 MB
+Convert_done
+Real time 0:06:08, CP time 342.410
+Done!

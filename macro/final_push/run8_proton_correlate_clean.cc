@@ -1,0 +1,237 @@
+#include "QnDataFrame.hpp"
+
+vector <vector<string>> u1Q1_mean=
+{
+  {"proton_PLAIN"},
+  {"F2_PLAIN"},
+  { "F3_PLAIN"},
+  {"F1_PLAIN"},
+  {"proton_RECENTERED"},
+  {"F2_RECENTERED"},
+  { "F3_RECENTERED"},
+  {"F1_RECENTERED"},
+  {"proton_RESCALED"},
+  {"F2_RESCALED"},
+  { "F3_RESCALED"},
+  {"F1_RESCALED"},
+};
+vector <vector<string>> u1_rescaled_Q1_rescaled=
+{
+  {"proton_RESCALED", "F1_RESCALED"},
+  {"proton_RESCALED", "F2_RESCALED"},
+  {"proton_RESCALED", "F3_RESCALED"},
+  
+
+/*  {"proton_RECENTERED", "F1_RESCALED"},
+  {"proton_RECENTERED", "F2_RESCALED"},
+  {"proton_RECENTERED", "F3_RESCALED"},
+  
+  {"proton_PLAIN", "F1_RESCALED"},
+  {"proton_PLAIN", "F2_RESCALED"},
+  {"proton_PLAIN", "F3_RESCALED"},*/
+};
+
+vector <vector<string>> Q1_rescaled_Q1_rescaled =
+{
+  {"F1_RESCALED", "F2_RESCALED"},
+  {"F1_RESCALED", "F3_RESCALED"},
+  {"F2_RESCALED", "F3_RESCALED"},
+
+
+   {"Tneg_RESCALED", "F1_RESCALED"},
+   {"Tneg_RESCALED", "F2_RESCALED"},
+   {"Tneg_RESCALED", "F3_RESCALED"},
+
+   {"Tpos_RESCALED", "F1_RESCALED"},
+   {"Tpos_RESCALED", "F2_RESCALED"},
+   {"Tpos_RESCALED", "F3_RESCALED"},
+};
+
+vector <vector<string>> u2Q1Q1_rescaled=
+{ 
+  {"proton_RESCALED", "F1_RESCALED", "F2_RESCALED"},
+  {"proton_RESCALED", "F2_RESCALED", "F3_RESCALED"},
+  {"proton_RESCALED", "F1_RESCALED", "F3_RESCALED"},
+};
+
+vector <vector<string>> u3Q1Q1Q1_rescaled=
+{
+  {"proton_RESCALED", "F1_RESCALED", "F2_RESCALED", "F3_RESCALED"},
+};
+
+namespace P1{
+inline auto x(unsigned int h_a){
+	return [h_a](const Qn::QVector &a) {
+      return a.x(h_a);
+    };
+  }
+inline auto y(unsigned int h_a) {
+    return [h_a](const Qn::QVector &a) {
+      return a.y(h_a);
+    };
+  }
+}
+namespace P4{
+
+  inline auto xxxx(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.x(h_a) * b.x(h_b) * c.x(h_c) * d.x(h_d);
+    };
+  }
+
+  inline auto xxyy(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.x(h_a) * b.x(h_b) * c.y(h_c) * d.y(h_d);
+    };
+  }
+
+  inline auto xyxy(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.x(h_a) * b.y(h_b) * c.x(h_c) * d.y(h_d);
+    };
+  }
+
+
+  inline auto xyyx(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.x(h_a) * b.y(h_b) * c.y(h_c) * d.x(h_d);
+    };
+  }
+
+  inline auto yxxy(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.y(h_a) * b.x(h_b) * c.x(h_c) * d.y(h_d);
+    };
+  }
+
+  inline auto yxyx(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.y(h_a) * b.x(h_b) * c.y(h_c) * d.x(h_d);
+    };
+  }
+
+  inline auto yyxx(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.y(h_a) * b.y(h_b) * c.x(h_c) * d.x(h_d);
+    };
+  }
+
+  inline auto yyyy(unsigned int h_a, unsigned int h_b, unsigned int h_c, unsigned int h_d) {
+    return [h_a, h_b, h_c, h_d](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) {
+      return a.y(h_a) * b.y(h_b) * c.y(h_c) * d.y(h_d);
+    };
+  }
+
+}
+void run8_proton_correlate_clean(string inputFiles="qn.root", string outputFile="corr.root")
+{
+  int nSamples = 100;
+  Qn::AxisD centAxis({"centrality", {0,5,10,15,20,25,30,35,40,50,60,70}});
+  Qn::AxisD runidAxis({"runId", {0,7300,7550,7650,7760,7930,8100,9000}});
+  //Qn::AxisD runidAxis({"runId", {6666.5, 6667.5, 6668.5, 6669.5, 6670.5, 6671.5, 6672.5, 6673.5, 6674.5, 6675.5, 6676.5, 6677.5, 6678.5, 6679.5, 6680.5, 6682.0, 6683.5, 6684.5, 6686.0, 6688.0, 6690.5, 6691.5, 6692.5, 6693.0, 6694.5, 6695.5, 6697.0, 6698.5, 6715.5, 6731.5, 6732.5, 6733.5, 6735.5, 6737.5, 6738.5, 6739.5, 6742.5, 6748.5, 6752.5, 6756.5, 6760.5, 6763.0, 6765.5, 6766.5, 6767.5, 6768.5, 6770.0, 6771.5, 6772.5, 6773.5, 6776.5, 6779.5, 6781.0, 6782.5, 6784.0, 6785.5, 6787.0, 6790.5, 6794.5, 6796.0, 6797.5, 6798.0, 6799.5, 6801.5, 6803.5, 6815.5, 6816.5, 6817.5, 6818.5, 6819.5, 6820.5, 6821.5, 6822.5, 6879.5, 6881.0, 6882.5, 6883.5, 6885.0, 6886.5, 6888.0, 6890.0, 6895.5, 6900.5, 6901.5, 6902.5, 6903.5, 6904.5, 6905.5, 6906.5, 6907.5, 6908.5, 6909.5, 6910.5, 6913.0, 6915.5, 6917.0, 6918.5, 6919.5, 6920.5, 6922.0, 6923.5, 6925.0, 6926.5, 6927.5, 6928.5, 6929.5, 6930.5, 6931.5, 6932.5, 6933.5, 6934.5, 6935.5, 6936.5, 6938.0, 6939.5, 6954.0, 6967.5, 6968.5, 6970.0, 6971.5, 6972.5, 6973.5, 6974.5, 6975.5, 6976.5, 6977.5, 6978.5, 6979.5, 6980.5, 6981.5, 6982.5, 6983.5, 6987.0, 6990.5, 6991.5, 6992.5, 6993.5, 6994.5, 6996.0, 6997.5, 6998.5, 6999.5, 7001.0, 7002.5, 7003.5, 7004.5, 7005.5, 7007.0, 7008.5, 7009.5, 7010.5, 7011.5, 7012.5, 7021.0, 7030.5, 7031.5, 7032.5, 7033.5, 7034.5, 7036.0, 7037.5, 7039.0, 7040.5, 7041.5, 7042.5, 7043.5, 7045.0, 7046.5, 7047.5, 7048.5, 7049.5, 7050.5, 7051.5, 7052.5, 7053.5, 7054.5, 7055.5, 7056.5, 7065.5, 7075.5, 7076.5, 7077.5, 7078.5, 7080.0, 7081.5, 7082.5, 7083.5, 7085.0, 7086.5, 7088.0, 7091.5, 7092.5, 7093.5, 7095.0, 7096.5, 7097.5, 7098.5, 7101.5, 7102.5, 7103.5, 7104.5, 7114.5, 7125.5, 7126.5, 7127.5, 7128.5, 7129.5, 7130.5, 7131.5, 7132.5, 7134.0, 7135.5, 7136.5, 7137.5, 7141.5, 7146.5, 7147.5, 7148.0, 7149.5, 7150.5, 7152.5, 7154.5, 7155.5, 7156.5, 7158.0, 7159.5, 7160.5, 7161.5, 7162.5, 7163.5, 7164.5, 7165.5, 7166.5, 7167.5, 7170.5, 7173.5, 7174.5, 7175.5, 7176.5, 7177.5, 7178.5, 7179.5, 7180.5, 7181.5, 7183.0, 7184.5, 7185.0, 7186.5, 7187.5, 7189.0, 7191.5, 7192.5, 7193.5, 7194.5, 7195.5, 7197.5, 7200.5, 7201.0, 7202.5, 7204.0, 7205.5, 7206.5, 7207.5, 7208.5, 7210.0, 7211.5, 7212.5, 7213.5, 7214.5, 7215.5, 7216.5, 7217.5, 7218.5, 7219.5, 7221.5, 7223.5, 7224.0, 7240.0, 7255.5, 7256.5, 7258.5, 7259.5, 7261.5, 7262.0, 7263.5, 7264.5, 7265.5, 7266.5, 7267.5, 7268.5, 7269.5, 7270.5, 7271.5, 7273.0, 7274.5, 7275.0, 7276.5, 7277.5, 7278.5, 7280.0, 7281.5, 7282.5, 7284.5, 7285.0, 7286.5, 7287.0, 7288.5, 7289.5, 7290.5, 7301.5, 7311.5, 7312.5, 7316.5, 7320.5, 7321.5, 7322.5, 7323.5, 7324.0, 7325.5, 7326.5, 7327.5, 7328.5, 7329.0, 7336.5, 7337.5, 7339.5, 7342.5, 7343.5, 7344.5, 7345.5, 7346.5, 7347.0, 7348.5, 7349.5, 7350.5, 7351.5, 7352.5, 7353.5, 7354.5, 7355.5, 7356.5, 7357.5, 7358.5, 7360.0, 7361.5, 7362.0, 7363.5, 7364.5, 7365.5, 7366.0, 7367.5, 7368.0, 7369.5, 7371.5, 7374.5, 7375.0, 7376.5, 7377.5, 7378.5, 7379.5, 7380.5, 7381.5, 7382.5, 7384.0, 7386.5, 7387.5, 7388.5, 7389.5, 7390.5, 7391.5, 7392.5, 7393.5, 7394.0, 7395.5, 7396.5, 7397.5, 7398.5, 7399.5, 7400.5, 7401.5, 7402.5, 7404.0, 7405.5, 7406.5, 7407.0, 7408.5, 7409.5, 7410.5, 7411.5, 7412.5, 7413.5, 7414.5, 7416.0, 7417.5, 7418.5, 7420.0, 7421.5, 7422.5, 7424.0, 7425.5, 7426.0, 7427.5, 7428.5, 7430.0, 7431.5, 7432.5, 7433.5, 7434.5, 7436.0, 7437.5, 7438.0, 7439.5, 7440.5, 7441.5, 7443.0, 7444.5, 7445.5, 7446.5, 7448.0, 7449.5, 7450.0, 7451.5, 7452.5, 7453.5, 7454.5, 7455.5, 7456.5, 7457.5, 7459.0, 7460.5, 7465.0, 7469.5, 7470.5, 7471.5, 7472.5, 7473.5, 7475.5, 7477.5, 7479.0, 7480.5, 7481.5,7482.5, 7483.5, 7485.5, 7487.5, 7488.5, 7489.5, 7490.5, 7491.5, 7492.5, 7494.0, 7495.5, 7496.0, 7497.5, 7499.0, 7500.5, 7501.5, 7507.5, 7513.5, 7514.5, 7516.0, 7517.5, 7518.0, 7519.5, 7520.5, 7524.5, 7528.5, 7529.5, 7530.5, 7531.5, 7532.5, 7533.5, 7535.5, 7537.5, 7538.5, 7540.5, 7542.5, 7543.5, 7544.0, 7545.5, 7546.5, 7548.0, 7549.5, 7550.5, 7551.5, 7552.5, 7553.5, 7558.5, 7564.5, 7565.5, 7566.5, 7568.0, 7569.5, 7571.0, 7572.5, 7573.5, 7574.5, 7576.0, 7577.5, 7578.0, 7579.5, 7580.5, 7581.5, 7582.5, 7584.5, 7585.5, 7586.5, 7587.5, 7588.5, 7590.5, 7591.5, 7594.0, 7596.5, 7597.5, 7598.0, 7599.5, 7600.5, 7602.0, 7604.5, 7605.5, 7606.5, 7607.5, 7608.5, 7609.5, 7610.0, 7611.5, 7612.5, 7617.5, 7622.5, 7623.5, 7624.0, 7625.5, 7626.5, 7627.5, 7628.5, 7629.0, 7630.5, 7631.5, 7632.0, 7633.5, 7634.5, 7635.5, 7636.5, 7637.0, 7638.5, 7639.5, 7640.5, 7641.5, 7642.0, 7643.5, 7644.5, 7645.5, 7646.5, 7648.0, 7649.5, 7652.0, 7655.5, 7656.5, 7658.0, 7659.5, 7661.0, 7662.5, 7663.5, 7664.5, 7665.5, 7667.0, 7668.5, 7669.5, 7670.5, 7672.0, 7673.5, 7674.5, 7675.5, 7676.5, 7677.5, 7678.5, 7680.0, 7681.5, 7683.0, 7684.5, 7686.0, 7687.5, 7688.5, 7689.5, 7691.0, 7692.5, 7693.5, 7695.0, 7696.5, 7697.0, 7698.5, 7699.0, 7700.5, 7701.5, 7702.5, 7703.5, 7704.5, 7706.0, 7707.5, 7710.5, 7711.0, 7712.5, 7713.5, 7714.5, 7715.5, 7716.5, 7717.5, 7718.5, 7719.5, 7721.5, 7722.0, 7723.5, 7724.5, 7725.5, 7726.5, 7727.5, 7728.5, 7729.5, 7730.5, 7731.0, 7732.5, 7733.5, 7734.5, 7736.0, 7737.5, 7744.0, 7751.5, 7752.5, 7754.0, 7755.5, 7756.5, 7758.5, 7761.5, 7762.5, 7763.5, 7764.5, 7765.0, 7766.5, 7767.5, 7768.5, 7770.0, 7771.5, 7773.5, 7775.5, 7776.5, 7777.0, 7778.5, 7779.5, 7780.5, 7781.5, 7782.0, 7783.5, 7784.5, 7785.5, 7787.0, 7788.5, 7789.5, 7790.5, 7792.5, 7794.5, 7795.5, 7796.5, 7797.5, 7798.5, 7799.5, 7801.5, 7802.5, 7803.5, 7808.5, 7814.5, 7815.0, 7816.5, 7817.5, 7819.5, 7820.0, 7821.5, 7822.5, 7824.5, 7825.5, 7826.5, 7828.5, 7829.5, 7830.5, 7831.5, 7833.0, 7834.5, 7835.5, 7838.5, 7842.5, 7844.0, 7845.5, 7846.5, 7848.0, 7849.5, 7854.5, 7861.5, 7865.5, 7866.5, 7868.5, 7869.5, 7871.0, 7872.5, 7873.5, 7874.5, 7875.0, 7876.5, 7877.5, 7878.5, 7879.0, 7880.5, 7881.0, 7882.5, 7883.5, 7884.5, 7885.5, 7886.5, 7888.0, 7889.5, 7890.5, 7891.5, 7892.5, 7893.5, 7895.0, 7896.5, 7897.5, 7898.5, 7899.5, 7900.5, 7902.0, 7903.5, 7904.5, 7905.5, 7906.5, 7908.0, 7909.5, 7910.5, 7911.5, 7912.5, 7913.5, 7922.5, 7931.5, 7932.5, 7933.5, 7934.0, 7935.5, 7936.0, 7937.5, 7938.5, 7940.0, 7941.5, 7942.5, 7943.0, 7944.5, 7946.0, 7948.5, 7949.5, 7951.0, 7952.5, 7953.0, 7954.5, 7955.5, 7956.5, 7957.5, 7958.5, 7959.0, 7960.5, 7961.5, 7962.5, 7964.0, 7965.5, 7966.5, 7967.5, 7971.0, 7975.5, 7976.0, 7977.5, 7978.5, 7980.0, 7981.5, 7982.5, 7984.0, 7986.5, 7987.0, 7988.5, 7989.5, 7990.5, 7991.5, 7993.5, 7995.5, 7996.5, 7997.5, 7998.5, 7999.5, 8000.5, 8001.5, 8003.0, 8004.5, 8005.5, 8006.5, 8007.5, 8008.5, 8010.5, 8013.5, 8014.5, 8015.5, 8017.0, 8018.5, 8019.0, 8020.5, 8021.5, 8022.5, 8024.5, 8026.5, 8027.5, 8028.5, 8029.5, 8030.5, 8031.5, 8032.5, 8035.5, 8038.5, 8039.5, 8040.5, 8041.5, 8043.0, 8044.5, 8045.5, 8046.5, 8047.5, 8049.0, 8050.5, 8051.5, 8052.5, 8054.0, 8055.5, 8056.5, 8057.5, 8058.5, 8060.0, 8061.5, 8062.0, 8063.5, 8064.5, 8065.5, 8067.0, 8068.5, 8069.5, 8070.5, 8071.5, 8073.0, 8074.5, 8075.5, 8076.5, 8078.0, 8079.5, 8080.5, 8081.5, 8083.0, 8084.5, 8085.0, 8086.5, 8087.5, 8088.5, 8089.5,8093.5, 8097.5, 8098.5, 8100.5, 8101.5, 8102.5, 8103.0, 8104.5, 8105.0, 8106.5, 8107.0, 8108.5, 8109.5, 8110.5, 8111.5, 8112.5, 8114.0, 8115.5, 8116.5, 8117.5, 8118.5, 8120.0, 8121.5, 8122.5, 8123.5, 8126.5, 8129.5, 8130.5, 8132.0, 8133.5, 8135.0, 8137.5, 8138.5, 8139.5, 8140.5, 8141.5, 8143.0, 8144.5, 8150.0, 8156.5, 8157.5, 8158.5, 8159.5, 8160.5, 8161.5, 8163.5, 8165.5, 8166.5, 8168.0, 8169.5, 8171.5, 8173.5, 8174.5, 8175.5, 8176.5, 8178.5, 8180.5, 8181.5, 8183.5, 8184.5, 8185.0, 8186.5, 8187.0, 8188.5, 8189.0, 8190.5, 8191.5, 8192.5, 8194.0, 8195.5, 8197.0, 8198.5, 8200.0, 8201.5, 8202.5, 8203.5, 8204.5, 8205.5, 8206.5, 8207.5, 8208.5, 8209.5, 8210.5, 8211.5, 8212.5, 8214.0, 8215.5, 8216.0, 8217.5, 8218.0, 8219.5, 8220.5, 8224.5, 8228.5, 8229.5, 8230.5, 8233.0, 8235.5, 8236.5, 8237.0, 8238.5, 8239.5, 8241.0, 8242.5, 8243.0, 8244.5, 8245.5, 8246.5, 8247.5, 8248.5, 8249.0, 8250.5, 8251.5, 8252.0, 8253.5, 8254.5, 8255.5, 8256.5, 8257.5, 8261.5, 8265.5, 8266.5, 8267.5, 8269.0, 8270.5, 8271.5, 8272.0, 8273.5, 8274.5, 8275.5, 8276.5, 8277.5, 8278.5, 8280.0, 8281.5, 8282.5, 8284.5, 8285.0, 8286.5, 8287.5, 8288.5, 8289.5, 8290.5, 8291.0, 8292.5, 8293.5, 8294.5, 8296.0, 8297.5, 8298.5, 8299.5, 8302.5, 8305.5, 8306.5}});
+  
+auto axes_correlation = Qn::MakeAxes(centAxis, runidAxis);
+  std::string treename = "tree";
+  auto* chain = new TChain( treename.c_str() );
+  chain->AddFile( inputFiles.c_str() );
+  if( chain->GetEntries() <= 0 )
+    return;
+  ROOT::RDataFrame d( *chain );
+  auto d_samples = Qn::Correlation::Resample(d, nSamples);
+
+  namespace P2 = Qn::Correlation::TwoParticle;
+  namespace P3 = Qn::Correlation::MixedHarmonics;
+  auto wn = Qn::Correlation::UseWeights::No;
+  auto wy = Qn::Correlation::UseWeights::Yes;
+  auto wUnity = [](const Qn::QVector &a, const Qn::QVector &b) { return 1; };
+  auto wSumWu = [](const Qn::QVector &a, const Qn::QVector &b) { return a.sumweights(); };
+  auto wSumWu3part = [](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c) { return a.sumweights(); };
+  auto wSumWu4part = [](const Qn::QVector &a, const Qn::QVector &b, const Qn::QVector &c, const Qn::QVector &d) { return a.sumweights(); };
+
+  auto wSumWu1part = [](const Qn::QVector &a){return a.sumweights(); };
+
+  auto corrBuilder =
+    Qn::Correlation::CorrelationBuilder{&d_samples, nSamples, axes_correlation};
+
+
+   // *******************************************
+   // -------------- u1/Q1 mean mean --------------
+   // *******************************************
+   
+/*  for ( auto &corr: u1Q1_mean )
+  {
+    std::array<std::string, 1> qn{corr.at(0)};
+    string corrName=corr.at(0);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".x1", P1::x(1), wSumWu1part, wy, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".y1", P1::y(1), wSumWu1part, wy, qn, qn);
+  }*/
+
+/*for ( auto &corr: u1Q1_mean )
+  {
+    std::array<std::string, 1> qn{corr.at(0)};
+    string corrName=corr.at(0);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".x2", P1::x(2), wSumWu1part, wy, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".y2", P1::y(2), wSumWu1part, wy, qn, qn);
+  }
+  */ 
+
+  // *******************************************
+  // -------------- Q1 RESCALED --------------
+  // *******************************************
+
+  for ( auto &corr: u1_rescaled_Q1_rescaled )
+  {
+    std::array<std::string, 2> qn{corr.at(0), corr.at(1)};
+    string corrName=corr.at(0)+"."+corr.at(1);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".x1x1", P2::xx(1, 1), wSumWu, wy, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".y1y1", P2::yy(1, 1), wSumWu, wy, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".x1y1", P2::xy(1, 1), wSumWu, wy, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".y1x1", P2::yx(1, 1), wSumWu, wy, qn, qn);
+  }
+
+  for (auto &corr: Q1_rescaled_Q1_rescaled)
+  {
+    std::array<std::string, 2> qn{corr.at(0), corr.at(1)};
+    string corrName=corr.at(0)+"."+corr.at(1);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".x1x1", P2::xx(1, 1), wUnity, wn, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".y1y1", P2::yy(1, 1), wUnity, wn, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".x1y1", P2::xy(1, 1), wUnity, wn, qn, qn);
+    corrBuilder.AddCorrelationWithInternalReader(corrName+".y1x1", P2::yx(1, 1), wUnity, wn, qn, qn);
+  }
+
+  // for ( auto &corr: u2Q1Q1_rescaled )
+  // {
+  //   std::array<std::string, 3> qn{corr.at(0), corr.at(1), corr.at(2)};
+  //   string corrName=corr.at(0)+"."+corr.at(1)+"."+corr.at(2);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x2x1x1", P3::xxx(2, 1, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x2y1y1", P3::xyy(2, 1, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y2x1y1", P3::yxy(2, 1, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y2y1x1", P3::yyx(2, 1, 1), wSumWu3part, wy, qn, qn);
+  // }
+
+  // for ( auto &corr: u3Q1Q1Q1_rescaled )
+  // {
+  //   std::array<std::string, 4> qn{corr.at(0), corr.at(1), corr.at(2), corr.at(3)};
+  //   string corrName=corr.at(0)+"."+corr.at(1)+"."+corr.at(2)+"."+corr.at(3);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3x1x1x1", P4::xxxx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3x1y1y1", P4::xxyy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3y1x1y1", P4::xyxy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3y1y1x1", P4::xyyx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+    
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3x1x1y1", P4::yxxy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3x1y1x1", P4::yxyx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3y1x1x1", P4::yyxx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3y1y1y1", P4::yyyy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  // }
+
+  // ---------------- //
+  // saving to output //
+  // ---------------- //
+  auto corrFile = TFile::Open(outputFile.c_str(), "RECREATE");
+  corrFile->cd();
+  auto results = corrBuilder.GetResults();
+  for (auto &res : results) {
+    res->Write();
+  }
+  corrFile->Close();
+}

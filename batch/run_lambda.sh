@@ -1,35 +1,44 @@
 #!/bin/bash
 
-#SBATCH -p cpu
-#SBATCH -t 8:00:00
+#SBATCH -D /scratch2/troshin/qn/log
+#SBATCH -p nica
+##SBATCH -t 24:00:00
 #SBATCH -J QnTools
-#SBATCH -o /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/log/%A_%a.log
-
-list_dir=${1}
-output_dir=${2}
-
+#SBATCH -a 1-300
+#SBATCH --mem-per-cpu=4G
+#SBATCH -o /scratch2/troshin/qn/log/%A_%a.log
+#SBATCH --exclude=ncx112,ncx114,ncx115,ncx121,ncx127,ncx132,ncx145,ncx146,ncx148,ncx151,ncx153,ncx154,ncx155,ncx156,ncx157,ncx158,ncx159,ncx160,ncx161,ncx163,ncx164,ncx165,ncx166,ncx168,ncx171,ncx172,ncx175,ncx181,ncx184,ncx206,ncx212,ncx214,ncx216,ncx222,ncx223,ncx225,ncx227,ncx228
+date
+hostname
+list_dir=/scratch2/troshin/qn/list_dir/
+output_dir=/scratch2/troshin/qn/out
 id=$SLURM_ARRAY_TASK_ID
-
+#NP_lambda_candidates_1040.list
+input_list=/lhep/users/vtroshin/candidates.list
+split -l 1 -d -a 4 --additional-suffix=.txt $input_list $list_dir
 file_list=$( ls $list_dir | head -n $id | tail -n 1 )
-
+##107_6
 mkdir -p $output_dir
 cd $output_dir
 mkdir $id
 cd $id
+qa=/scratch2/troshin/qn/out/qa.root
+eff_file=/lhep/users/vtroshin/JAM_bmn_eff_map.root
+source /cvmfs/nica.jinr.ru/sw/os/login.sh legacy
+module add mpddev
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lhep/users/vtroshin/PFSimple/install/lib/:/lhep/users/vtroshin/PFSimple/install/external/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lhep/users/vtroshin/QnTools/install/lib:/lhep/users/vtroshin/qntools_macros/build/
 
-source /mnt/pool/nica/7/mam2mih/soft/basov/root-6.24.06/install/bin/thisroot.sh
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/mnt/pool/nica/7/mam2mih/soft/basov/QnTools/install/lib:/mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/
-
-echo "/mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/correct /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list"
 
 # PLAIN
-time /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/correct /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/efficiency/lambda_efficiency.root
+time /lhep/users/vtroshin/qntools_macros/build/correct /lhep/users/vtroshin/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list ${eff_file} ${qa}
+time mv $output_dir/$id/qa.root $output_dir/qa_${id}.root
 # RECENTERING
-time /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/correct /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/efficiency/lambda_efficiency.root
+#time /lustre/home/user/v/vtroshin/bmn_hyperons/qntools_macros/build/correct /lustre/home/user/v/vtroshin/bmn_hyperons/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list
 # TWIST AND RESCALING
-time /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/correct /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/efficiency/lambda_efficiency.root
+#time /lustre/home/user/v/vtroshin/bmn_hyperons/qntools_macros/build/correct /lustre/home/user/v/vtroshin/bmn_hyperons/qntools_macros/macro/lambda_correct.cc $list_dir/$file_list
 
-echo "/mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/correlate /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/macro/lambda_correlate.cc correction_out.root"
-time /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/build/correlate /mnt/pool/nica/7/mam2mih/soft/basov/qntools_macros/macro/lambda_correlate.cc correction_out.root
+time /lhep/users/vtroshin/qntools_macros/build/correlate /lhep/users/vtroshin/qntools_macros/macro/lambda_correlate.cc correction_out.root
+time mv $output_dir/$id/corr.root $output_dir/corr_${id}.root
 
 echo "The End."

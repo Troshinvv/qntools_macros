@@ -5,36 +5,21 @@ vector <vector<string>> Q1Q1=
   {"F1_RESCALED", "F2_RESCALED"},
   {"F1_RESCALED", "F3_RESCALED"},
   {"F2_RESCALED", "F3_RESCALED"},
-  
-/*  {"Tneg_RESCALED", "F1_RESCALED"},
-  {"Tneg_RESCALED", "F2_RESCALED"},
-  {"Tneg_RESCALED", "F3_RESCALED"},
-
-  {"Tpos_RESCALED", "F1_RESCALED"},
-  {"Tpos_RESCALED", "F2_RESCALED"},
-  {"Tpos_RESCALED", "F3_RESCALED"},*/
 };
 
 vector <vector<string>> u1Q1=
 {
-  {"lambda_good_RESCALED",        "F1_RESCALED"},
+  {"k_short_good_RESCALED",        "F1_RESCALED"},
   
-  {"lambda_good_RESCALED",        "F2_RESCALED"},
+  {"k_short_good_RESCALED",        "F2_RESCALED"},
 
-  {"lambda_good_RESCALED",        "F3_RESCALED"},
-
-/*  {"lambda_nonflow_RESCALED",        "F1_RESCALED"},
-
-  {"lambda_nonflow_RESCALED",        "F2_RESCALED"},
-
-  {"lambda_nonflow_RESCALED",        "F3_RESCALED"},*/
+  {"k_short_good_RESCALED",        "F3_RESCALED"},
 };
 
-
-void lambda_correlate(string inputFiles="qn.root", string outputFile="corr.root")
+void k_short_correlate(string inputFiles="qn.root", string outputFile="corr.root")
 {
   int nSamples = 100;
-  Qn::AxisD centAxis({"centrality", 3, 10, 40});
+  Qn::AxisD centAxis({"centrality", 6, 10, 30});
   auto axes_correlation = Qn::MakeAxes(centAxis);
   ROOT::RDataFrame d( "tree", inputFiles.c_str() );
   auto d_samples = Qn::Correlation::Resample(d, nSamples);

@@ -13,17 +13,25 @@ vector <vector<string>> Q1_rescaled_Q1_rescaled =
   {"F1_RESCALED", "F3_RESCALED"},
   {"F2_RESCALED", "F3_RESCALED"},
 
-  // {"Tneg_RESCALED", "F1_RESCALED"},
-  // {"Tneg_RESCALED", "F2_RESCALED"},
-  // {"Tneg_RESCALED", "F3_RESCALED"},
+  {"Tneg_RESCALED", "F1_RESCALED"},
+  {"Tneg_RESCALED", "F2_RESCALED"},
+  {"Tneg_RESCALED", "F3_RESCALED"},
 
-  // {"Tpos_RESCALED", "F1_RESCALED"},
-  // {"Tpos_RESCALED", "F2_RESCALED"},
-  // {"Tpos_RESCALED", "F3_RESCALED"},
+  {"Tpos_RESCALED", "F1_RESCALED"},
+  {"Tpos_RESCALED", "F2_RESCALED"},
+  {"Tpos_RESCALED", "F3_RESCALED"},
 };
 
 vector <vector<string>> u2Q1Q1_rescaled=
-{ 
+{
+  {"proton_RESCALED", "F1_RESCALED", "F1_RESCALED"},
+  {"proton_RESCALED", "F2_RESCALED", "F2_RESCALED"},
+  {"proton_RESCALED", "F3_RESCALED", "F3_RESCALED"},
+
+  {"proton_RESCALED", "F1_RESCALED", "Tneg_RESCALED"},
+  {"proton_RESCALED", "F2_RESCALED", "Tneg_RESCALED"},
+  {"proton_RESCALED", "F3_RESCALED", "Tneg_RESCALED"},
+  
   {"proton_RESCALED", "F1_RESCALED", "F2_RESCALED"},
   {"proton_RESCALED", "F2_RESCALED", "F3_RESCALED"},
   {"proton_RESCALED", "F1_RESCALED", "F3_RESCALED"},
@@ -32,6 +40,14 @@ vector <vector<string>> u2Q1Q1_rescaled=
 vector <vector<string>> u3Q1Q1Q1_rescaled=
 {
   {"proton_RESCALED", "F1_RESCALED", "F2_RESCALED", "F3_RESCALED"},
+  {"proton_RESCALED", "F1_RESCALED", "F3_RESCALED", "Tneg_RESCALED"},
+  {"proton_RESCALED", "F1_RESCALED", "F2_RESCALED", "Tneg_RESCALED"},
+  {"proton_RESCALED", "F2_RESCALED", "F3_RESCALED", "Tneg_RESCALED"},
+
+  {"proton_RESCALED", "F1_RESCALED", "F1_RESCALED", "F1_RESCALED"},
+  {"proton_RESCALED", "F2_RESCALED", "F2_RESCALED", "F2_RESCALED"},
+  {"proton_RESCALED", "F3_RESCALED", "F3_RESCALED", "F3_RESCALED"},
+
 };
 
 namespace P4{
@@ -89,14 +105,9 @@ namespace P4{
 void run8_proton_correlate_clean(string inputFiles="qn.root", string outputFile="corr.root")
 {
   int nSamples = 100;
-  Qn::AxisD centAxis({"centrality", 4, 0, 40});
+  Qn::AxisD centAxis({"centrality", 8, 0, 40});
   auto axes_correlation = Qn::MakeAxes(centAxis);
-  std::string treename = "tree";
-  auto* chain = new TChain( treename.c_str() );
-  chain->AddFile( inputFiles.c_str() );
-  if( chain->GetEntries() <= 0 )
-    return;
-  ROOT::RDataFrame d( *chain );
+  ROOT::RDataFrame d( "tree", inputFiles.c_str() );
   auto d_samples = Qn::Correlation::Resample(d, nSamples);
 
   namespace P2 = Qn::Correlation::TwoParticle;
@@ -139,10 +150,10 @@ void run8_proton_correlate_clean(string inputFiles="qn.root", string outputFile=
   // {
   //   std::array<std::string, 3> qn{corr.at(0), corr.at(1), corr.at(2)};
   //   string corrName=corr.at(0)+"."+corr.at(1)+"."+corr.at(2);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x2x1x1", P3::xxx(2, 1, 1), wSumWu3part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x2y1y1", P3::xyy(2, 1, 1), wSumWu3part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y2x1y1", P3::yxy(2, 1, 1), wSumWu3part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y2y1x1", P3::yyx(2, 1, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x2x1x1", P3::xxx(2, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x2y1y1", P3::xyy(2, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y2x1y1", P3::yxy(2, 1), wSumWu3part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y2y1x1", P3::yyx(2, 1), wSumWu3part, wy, qn, qn);
   // }
 
   // for ( auto &corr: u3Q1Q1Q1_rescaled )
@@ -150,14 +161,10 @@ void run8_proton_correlate_clean(string inputFiles="qn.root", string outputFile=
   //   std::array<std::string, 4> qn{corr.at(0), corr.at(1), corr.at(2), corr.at(3)};
   //   string corrName=corr.at(0)+"."+corr.at(1)+"."+corr.at(2)+"."+corr.at(3);
   //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3x1x1x1", P4::xxxx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3x1y1y1", P4::xxyy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3y1x1y1", P4::xyxy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x3y1y1x1", P4::xyyx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
-    
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3x1x1y1", P4::yxxy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3x1y1x1", P4::yxyx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
-  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3y1x1x1", P4::yyxx(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
   //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y3y1y1y1", P4::yyyy(3, 1, 1, 1), wSumWu4part, wy, qn, qn);
+
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".x1x1x1x1", P4::xxxx(1, 1, 1, 1), wSumWu4part, wy, qn, qn);
+  //   corrBuilder.AddCorrelationWithInternalReader(corrName+".y1y1y1y1", P4::yyyy(1, 1, 1, 1), wSumWu4part, wy, qn, qn);
   // }
 
   // ---------------- //
