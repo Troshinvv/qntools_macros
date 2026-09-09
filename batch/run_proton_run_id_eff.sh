@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH -D /nica/mpd1/vtroshin/bmn_protons/log
-#SBATCH -p nica
-#SBATCH -t 24:00:00
+#SBATCH -p fast1
+#SBATCH -t 10:00
 #SBATCH -J QnTools
 #SBATCH -a 1-772
 #SBATCH --mem-per-cpu=8G
@@ -11,7 +11,7 @@
 date
 hostname
 list_dir=/nica/mpd1/vtroshin/bmn_protons/list_dir/
-output_dir=/nica/mpd1/vtroshin/bmn_protons/out_weight_mamaev
+output_dir=/nica/mpd1/vtroshin/bmn_protons/out_runid_eff
 id=$SLURM_ARRAY_TASK_ID
 input_list=/lhep/users/vtroshin/run8_vf_25.09_all_300826.list
 split -l 28 -d -a 4 --additional-suffix=.txt $input_list $list_dir
@@ -26,8 +26,8 @@ cd $output_dir
 mkdir $id
 cd $id
 cp $efficiency_dir/efficiency.2024.04.03.root .
+cp $efficiency_dir/efficiency.2026.04.16.root .
 cp $calib_dir/run8_25.09_corrections.root .
-#cp $output_dir/first_qa.root qa.root
 cp $output_dir/second_qa.root qa.root
 sleep 10
 source /cvmfs/nica.jinr.ru/sw/os/login.sh
@@ -36,17 +36,17 @@ source /cvmfs/bmn.jinr.ru/bmnroot/25.09.0/x86_64-centos7/bmnroot_config.sh
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lhep/users/vtroshin/QnTools/install/lib:/lhep/users/vtroshin/qntools_macros/build/
 sleep 10
 echo "Plain started"
-time /lhep/users/vtroshin/qntools_macros/build/correct /lhep/users/vtroshin/qntools_macros/macro/final_push/run8_proton_correct_clean.cc $list_dir/$file_list efficiency.2024.04.03.root run8_25.09_corrections.root 
+time /lhep/users/vtroshin/qntools_macros/build/correct /lhep/users/vtroshin/qntools_macros/macro/final_push/run8_proton_qa.cc $list_dir/$file_list efficiency.2024.04.03.root efficiency.2026.04.16.root run8_25.09_corrections.root 
 #echo "Recentered started"
 #time /lhep/users/vtroshin/qntools_macros/build/correct /lhep/users/vtroshin/qntools_macros/macro/final_push/run8_proton_correct_clean.cc $list_dir/$file_list efficiency.2022.01.25.root run8_25.09_corrections.root
 #echo "Rescaled started"
 #time /lhep/users/vtroshin/qntools_macros/build/correct /lhep/users/vtroshin/qntools_macros/macro/final_push/run8_proton_correct_clean.cc $list_dir/$file_list efficiency.2022.01.25.root run8_25.09_corrections.root
 #echo "Correlate started"
-time mv $output_dir/$id/qa.root $output_dir/qa_${id}.root
+#time mv $output_dir/$id/qa.root $output_dir/qa_${id}.root
 #time /lhep/users/vtroshin/qntools_macros/build/correlate /lhep/users/vtroshin/qntools_macros/macro/final_push/run8_proton_correlate_clean.cc correction_out.root
 #time mv $output_dir/$id/corr.root $output_dir/corr_${id}.root
 #time /scratch2/troshin/bmn_protons/qntools_macros/build/correct /scratch2/troshin/bmn_protons/qntools_macros/macro/run8_proton_centrality_comparison.cc $list_dir/$file_list ${efficiency_dir}/efficiency.2022.01.25.root $calib_dir/run8_25.09_corrections.root ${qa}
-#time mv $output_dir/$id/out_qa.root $output_dir/out_qa_${id}.root
+time mv $output_dir/$id/out_qa.root $output_dir/out_qa_${id}.root
 echo "The End."
 
 

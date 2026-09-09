@@ -4,9 +4,11 @@
 
 #include <cmath>
 #include <vector>
+#include <cassert>
 
-void run8_proton_correct_clean( std::string list, 
+void run8_proton_correct_clean_runideff( std::string list, 
                           std::string str_effieciency_file,
+			  std::string str_run_id_efficiency_file,
                           std::string centrality_calib_file,
                           std::string calib_in_file="qa.root" ){
 
@@ -38,6 +40,32 @@ void run8_proton_correct_clean( std::string list,
   auto file_fit = TFile::Open( centrality_calib_file.c_str(), "READ" );
 	file_fit->cd();
 	auto g1_FitRunIdFactor_1 = file_fit->Get<TGraphErrors>("RunId_corr_factor_h2_RunId_RefMult_gt_mpd_8150_8200");
+
+auto file_run_id_eff = std::unique_ptr< TFile, std::function< void(TFile*) > >{ TFile::Open( str_run_id_efficiency_file.c_str(), "READ" ), [](auto f){f->Close(); } };
+  assert(file_run_id_eff);
+  THn* efficiency_eta_pT_phi_run_id{nullptr};
+	file_run_id_eff->GetObject("hn_efficiency", efficiency_eta_pT_phi_run_id);
+  assert(efficiency_eta_pT_phi_run_id);
+
+const auto trWeightFunction = [efficiency_eta_pT_phi_run_id]( 
+     ROOT::VecOps::RVec<float> pt_vec, ROOT::VecOps::RVec<float> eta_vec, ROOT::VecOps::RVec<float> phi_vec, UInt_t run_id 
+  ){  
+    std::vector<float> vec_efficiency(pt_vec.size(), 0.f);
+		for( int i=0; i<pt_vec.size(); i++ ){
+			auto pT = pt_vec.at(i);
+			auto eta = eta_vec.at(i);
+			auto phi = phi_vec.at(i);
+			auto coord = std::vector<double>{ eta, pT, phi, static_cast<double>(run_id) };
+			auto bin = efficiency_eta_pT_phi_run_id->GetBin( coord.data() );
+			if( bin <= 0 )
+				continue;
+			if( bin > efficiency_eta_pT_phi_run_id->GetNbins() )
+				continue;
+			auto weight = efficiency_eta_pT_phi_run_id->GetBinContent(bin);
+			vec_efficiency[i] = weight;
+		}
+		return vec_efficiency;
+  };
 
 
 
@@ -272,17 +300,13 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
           .Define("fhcalModY","ROOT::VecOps::RVec<float> y; for(auto& pos:fhcalModPos) y.push_back(pos.y()); return y;")
           .Define( "trFhcalX", function_fhcal_x, {"trParamLast"} )
           .Define( "trFhcalY", function_fhcal_y, {"trParamLast"} )
-//	  .Define( "pz", [&](ROOT::VecOps::RVec<float> mom,ROOT::VecOps::RVec<float> momt){std::vector<float> pz;for(int i=0;i<mom.size();i++){float pz1 = TMath::Sqrt(mom.at(i)*mom.at(i)-momt.at(i)*momt.at(i));pz.push_back(pz1);}return pz;},{"trP","trPt"})
-          // .Define( "trM2Tof700", m2_function, { "trMom", "trBetaTof700" } )
-          // .Define( "trM2Tof400", m2_function, { "trMom", "trBetaTof400" } )
-  //        .Define( "trNsigmaProton400", n_sigma_generator(f1_2212_m_400, f1_2212_s_400), { "trPq", "trM2Tof400_corr" } )
- //         .Define( "trNsigmaProton700", n_sigma_generator(f1_2212_m_700, f1_2212_s_700), { "trPq", "trM2Tof700_corr"  } )
           .Define( "trNsigmaProton", n_sigma_particle_function, {"trNsigma_2212_400", "trNsigma_2212_700"} )
-	  .Define( "trNsigmaDeit", n_sigma_particle_function, {"trNsigma_1000010020_400", "trNsigma_1000010020_700"} )
           .Define( "trProtonY", rapidity_generator(PROTON_M, Y_CM), {"trPz", "trPq"} )
-          .Define( "trWeight", weight_generator(efficiency_histo), {"trProtonY", "trPt"} )
-          .Define( "trWeightTof400", weight_generator(efficiency_tof400), {"trProtonY", "trPt"} )
-          .Define( "trWeightTof700", weight_generator(efficiency_tof700), {"trProtonY", "trPt"} )
+	  .Define( "trWeight", trWeightFunction, {"trPt","trEta","trPhi", "runId"} )
+          .Define( "trProtonEfficiency", weight_generator(efficiency_histo), {"trProtonY", "trPt"} )
+          .Define( "trProtonEfficiencyTof400", weight_generator(efficiency_tof400), {"trProtonY", "trPt"} )
+          .Define( "trProtonEfficiencyTof700", weight_generator(efficiency_tof700), {"trProtonY", "trPt"} )
+          .Define( "trProtonWeight", "std::vector<double> weights{}; for( auto i=size_t{0}; i<trWeight.size(); ++i ){ weights.push_back( trWeight[i]*trProtonEfficiency[i] ); } return weights;" )
           .Alias("trStsNhits", "stsTrackNhits")
           .Alias("trStsChi2", "stsTrackChi2Ndf")
           .Filter([&physical_runs, &bad_runs]( UInt_t run_id ){ 
@@ -304,7 +328,7 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
   correction_task.SetEventVariables(std::regex("centrality|runId"));
   correction_task.SetChannelVariables({std::regex("fhcalMod(X|Y|Phi|E|Id)")});
   correction_task.SetTrackVariables({
-                                            std::regex("tr(Pt|Eta|Phi|NsigmaProton|NsigmaDeit|Charge|ProtonY|DcaR|Chi2Ndf|Nhits|Weight|WeightTof400|WeightTof700|FhcalX|FhcalY|StsNhits|StsChi2)"),
+                                            std::regex("tr(Pt|Eta|Phi|NsigmaProton|Charge|ProtonY|DcaR|Chi2Ndf|Nhits|ProtonWeight|FhcalX|FhcalY|StsNhits|StsChi2)"),
                                     });
 
   correction_task.InitVariables();
@@ -386,16 +410,14 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
         { "trPt", 10, 0.0, 2.0 },
   };
   
-  VectorConfig proton( "proton", "trPhi", "trWeight", VECTOR_TYPE::TRACK, NORMALIZATION::M );
+  VectorConfig proton( "proton", "trPhi", "trProtonWeight", VECTOR_TYPE::TRACK, NORMALIZATION::M );
   proton.SetHarmonicArray( {1, 2, 3} );
   proton.SetCorrections( {CORRECTION::PLAIN, CORRECTION::RECENTERING,CORRECTION::TWIST_RESCALING  } );
   proton.SetCorrectionAxes( proton_axes );
+//  proton.SetAlignmentReference( "F2" );
   proton.AddCut( "trNsigmaProton", [](float n_sigma){
     return n_sigma < 3;
   }, "proton cut" );
-  proton.AddCut( "trNsigmaDeit", [](float n_sigma){
-    return n_sigma > 3;
-  }, "duetron cut" );
   proton.AddCut( "trFhcalX", [](float pos){
     return pos < -30.0 || pos > 160;
   }, "cut on x-pos in fhcal plane" );
@@ -411,42 +433,8 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
   proton.AddCut( "trStsChi2", [](float chi2){
     return chi2 < 5.0;
   }, "cut on chi2 in sts" );
-  proton.AddCut( "trEta", [](float eta){
-    return eta < 3.0;
-  }, "cut on eta for check" );
   proton.AddHisto2D({{"trProtonY", 100, -0.5, 1.5}, {"trPt", 100, 0.0, 2.0}});
   correction_task.AddVector(proton);
-
-  VectorConfig proton_n( "proton_none", "trPhi", "trWeight", VECTOR_TYPE::TRACK, NORMALIZATION::NONE );
-  proton_n.SetHarmonicArray( {1, 2, 3} );
-  proton_n.SetCorrections( {CORRECTION::PLAIN, CORRECTION::RECENTERING,CORRECTION::TWIST_RESCALING  } );
-  proton_n.SetCorrectionAxes( proton_axes );
-  proton_n.AddCut( "trNsigmaProton", [](float n_sigma){
-    return n_sigma < 3;
-  }, "proton cut" );
-  proton_n.AddCut( "trNsigmaDeit", [](float n_sigma){
-    return n_sigma > 3;
-  }, "duetron cut" );
-  proton_n.AddCut( "trFhcalX", [](float pos){
-    return pos < -30.0 || pos > 160;
-  }, "cut on x-pos in fhcal plane" );
-  proton_n.AddCut( "trFhcalY", [](float pos){
-    return pos < -60.0 || pos > 60;
-  }, "cut on y-pos in fhcal plane" );
-  proton_n.AddCut( "trStsNhits", [](float nhits){
-    return nhits > 5.5;
-  }, "cut on fake tracks" );
-  proton_n.AddCut( "trDcaR", [](float dca){
-    return dca < 5.0;
-  }, "DCA cut" );
-  proton_n.AddCut( "trStsChi2", [](float chi2){
-    return chi2 < 5.0;
-  }, "cut on chi2 in sts" );
-  proton_n.AddCut( "trEta", [](float eta){
-    return eta < 3.0;
-  }, "cut on eta for check" );
-  proton_n.AddHisto2D({{"trProtonY", 100, -0.5, 1.5}, {"trPt", 100, 0.0, 2.0}});
-  correction_task.AddVector(proton_n);
 
   std::cout << "Initialized" << std::endl;
 

@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 
-void run8_proton_correct_clean( std::string list, 
+void run8_proton_correct_track_sp( std::string list, 
                           std::string str_effieciency_file,
                           std::string centrality_calib_file,
                           std::string calib_in_file="qa.root" ){
@@ -272,13 +272,23 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
           .Define("fhcalModY","ROOT::VecOps::RVec<float> y; for(auto& pos:fhcalModPos) y.push_back(pos.y()); return y;")
           .Define( "trFhcalX", function_fhcal_x, {"trParamLast"} )
           .Define( "trFhcalY", function_fhcal_y, {"trParamLast"} )
+	  .Define( "trInFhcal", [](std::vector<float> vec_x, std::vector<float> vec_y){
+		std::vector<float> is_in; 
+		for(int i=0;i<vec_x.size();i++){
+			if(vec_x.at(i)>-40 && vec_x.at(i)<170 && vec_y.at(i)>-100 && vec_y.at(i)<100){
+				is_in.push_back(0);
+				continue;
+			}
+			is_in.push_back(1);
+		}
+	return is_in;
+	},{"trFhcalX","trFhcalY"})
 //	  .Define( "pz", [&](ROOT::VecOps::RVec<float> mom,ROOT::VecOps::RVec<float> momt){std::vector<float> pz;for(int i=0;i<mom.size();i++){float pz1 = TMath::Sqrt(mom.at(i)*mom.at(i)-momt.at(i)*momt.at(i));pz.push_back(pz1);}return pz;},{"trP","trPt"})
           // .Define( "trM2Tof700", m2_function, { "trMom", "trBetaTof700" } )
           // .Define( "trM2Tof400", m2_function, { "trMom", "trBetaTof400" } )
   //        .Define( "trNsigmaProton400", n_sigma_generator(f1_2212_m_400, f1_2212_s_400), { "trPq", "trM2Tof400_corr" } )
  //         .Define( "trNsigmaProton700", n_sigma_generator(f1_2212_m_700, f1_2212_s_700), { "trPq", "trM2Tof700_corr"  } )
           .Define( "trNsigmaProton", n_sigma_particle_function, {"trNsigma_2212_400", "trNsigma_2212_700"} )
-	  .Define( "trNsigmaDeit", n_sigma_particle_function, {"trNsigma_1000010020_400", "trNsigma_1000010020_700"} )
           .Define( "trProtonY", rapidity_generator(PROTON_M, Y_CM), {"trPz", "trPq"} )
           .Define( "trWeight", weight_generator(efficiency_histo), {"trProtonY", "trPt"} )
           .Define( "trWeightTof400", weight_generator(efficiency_tof400), {"trProtonY", "trPt"} )
@@ -304,7 +314,7 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
   correction_task.SetEventVariables(std::regex("centrality|runId"));
   correction_task.SetChannelVariables({std::regex("fhcalMod(X|Y|Phi|E|Id)")});
   correction_task.SetTrackVariables({
-                                            std::regex("tr(Pt|Eta|Phi|NsigmaProton|NsigmaDeit|Charge|ProtonY|DcaR|Chi2Ndf|Nhits|Weight|WeightTof400|WeightTof700|FhcalX|FhcalY|StsNhits|StsChi2)"),
+                                            std::regex("tr(Pt|Eta|Phi|NsigmaProton|Charge|ProtonY|DcaR|Chi2Ndf|Nhits|Weight|WeightTof400|WeightTof700|FhcalX|FhcalY|StsNhits|StsChi2|InFhcal)"),
                                     });
 
   correction_task.InitVariables();
@@ -341,113 +351,54 @@ auto GetCentrBin_8150_8200 = [](Double_t _refMult){ //RunId_corr_factor_h2_RunId
   f3.AddHisto2D({{"fhcalModX", 100, -100, 100}, {"fhcalModY", 100, -100, 100}});
   correction_task.AddVector(f3);
 
+	std::vector<Qn::AxisD> tvector_axes{        
+{ "trEta", 18, 1.4, 5 },
+        { "trPt", 9, 0.2, 2.0 },
+  };
    VectorConfig Tneg( "Tneg", "trPhi", "Ones", VECTOR_TYPE::TRACK, NORMALIZATION::M );
    Tneg.SetHarmonicArray( {1, 2} );
    Tneg.SetCorrections( {CORRECTION::PLAIN, CORRECTION::RECENTERING, CORRECTION::TWIST_RESCALING } );
+   Tneg.SetCorrectionAxes( tvector_axes );
    Tneg.AddCut( "trCharge", [](double charge){
      return charge < 0.0;
      }, "charge" );
-   Tneg.AddCut( "trEta", [](double eta){
-     return 2.0 < eta && eta < 3.0;
-     }, "eta cut" );
    Tneg.AddCut( "trPt", [](double pT){
-     return pT > 0.4;
+     return pT > 0.2;
      }, "pT cut" );
-   Tneg.AddCut( "trFhcalX", [](double pos){
-     return pos < -40.0 || pos > 170;
+/*   Tneg.AddCut( "trFhcalX", [](double pos){
+     return pos < -100.0 || pos > 250;
      }, "cut on x-pos in fhcal plane" );
    Tneg.AddCut( "trFhcalY", [](double pos){
      return pos < -100.0 || pos > 100;
-     }, "cut on y-pos in fhcal plane" );
+     }, "cut on y-pos in fhcal plane" );*/
+  Tneg.AddCut( "trInFhcal", [](double pos){
+     return pos == 1;
+     }, "cut on pos in fhcal plane" );
    correction_task.AddVector(Tneg);
 
    VectorConfig Tpos( "Tpos", "trPhi", "Ones", VECTOR_TYPE::TRACK, NORMALIZATION::M );
    Tpos.SetHarmonicArray( {1, 2, 3} );
    Tpos.SetCorrections( {CORRECTION::PLAIN, CORRECTION::RECENTERING, CORRECTION::TWIST_RESCALING } );
+   Tpos.SetCorrectionAxes( tvector_axes );
    Tpos.AddCut( "trCharge", [](double charge){
      return charge >= 0.0;
      }, "charge" );
-   Tpos.AddCut( "trEta", [](double eta){
-     return 2.0 < eta && eta < 3.0;
-   }, "eta cut" );
    Tpos.AddCut( "trPt", [](double pT){
      return pT > 0.2;
    }, "pT cut" );
-   Tpos.AddCut( "trFhcalX", [](double pos){
-     return pos < -40.0 || pos > 170;
+/*   Tpos.AddCut( "trFhcalX", [](double pos){
+     return pos < -100.0 || pos > 250;
      }, "cut on x-pos in fhcal plane" );
    Tpos.AddCut( "trFhcalY", [](double pos){
      return pos < -100.0 || pos > 100;
-     }, "cut on y-pos in fhcal plane" );
+     }, "cut on y-pos in fhcal plane" );*/
+   Tpos.AddCut( "trInFhcal", [](double pos){
+     return pos == 1;
+     }, "cut on pos in fhcal plane" );
    correction_task.AddVector(Tpos);
 
-  std::vector<Qn::AxisD> proton_axes{
-        { "trProtonY", 16, -0.2, 1.4 },
-        { "trPt", 10, 0.0, 2.0 },
-  };
+
   
-  VectorConfig proton( "proton", "trPhi", "trWeight", VECTOR_TYPE::TRACK, NORMALIZATION::M );
-  proton.SetHarmonicArray( {1, 2, 3} );
-  proton.SetCorrections( {CORRECTION::PLAIN, CORRECTION::RECENTERING,CORRECTION::TWIST_RESCALING  } );
-  proton.SetCorrectionAxes( proton_axes );
-  proton.AddCut( "trNsigmaProton", [](float n_sigma){
-    return n_sigma < 3;
-  }, "proton cut" );
-  proton.AddCut( "trNsigmaDeit", [](float n_sigma){
-    return n_sigma > 3;
-  }, "duetron cut" );
-  proton.AddCut( "trFhcalX", [](float pos){
-    return pos < -30.0 || pos > 160;
-  }, "cut on x-pos in fhcal plane" );
-  proton.AddCut( "trFhcalY", [](float pos){
-    return pos < -60.0 || pos > 60;
-  }, "cut on y-pos in fhcal plane" );
-  proton.AddCut( "trStsNhits", [](float nhits){
-    return nhits > 5.5;
-  }, "cut on fake tracks" );
-  proton.AddCut( "trDcaR", [](float dca){
-    return dca < 5.0;
-  }, "DCA cut" );
-  proton.AddCut( "trStsChi2", [](float chi2){
-    return chi2 < 5.0;
-  }, "cut on chi2 in sts" );
-  proton.AddCut( "trEta", [](float eta){
-    return eta < 3.0;
-  }, "cut on eta for check" );
-  proton.AddHisto2D({{"trProtonY", 100, -0.5, 1.5}, {"trPt", 100, 0.0, 2.0}});
-  correction_task.AddVector(proton);
-
-  VectorConfig proton_n( "proton_none", "trPhi", "trWeight", VECTOR_TYPE::TRACK, NORMALIZATION::NONE );
-  proton_n.SetHarmonicArray( {1, 2, 3} );
-  proton_n.SetCorrections( {CORRECTION::PLAIN, CORRECTION::RECENTERING,CORRECTION::TWIST_RESCALING  } );
-  proton_n.SetCorrectionAxes( proton_axes );
-  proton_n.AddCut( "trNsigmaProton", [](float n_sigma){
-    return n_sigma < 3;
-  }, "proton cut" );
-  proton_n.AddCut( "trNsigmaDeit", [](float n_sigma){
-    return n_sigma > 3;
-  }, "duetron cut" );
-  proton_n.AddCut( "trFhcalX", [](float pos){
-    return pos < -30.0 || pos > 160;
-  }, "cut on x-pos in fhcal plane" );
-  proton_n.AddCut( "trFhcalY", [](float pos){
-    return pos < -60.0 || pos > 60;
-  }, "cut on y-pos in fhcal plane" );
-  proton_n.AddCut( "trStsNhits", [](float nhits){
-    return nhits > 5.5;
-  }, "cut on fake tracks" );
-  proton_n.AddCut( "trDcaR", [](float dca){
-    return dca < 5.0;
-  }, "DCA cut" );
-  proton_n.AddCut( "trStsChi2", [](float chi2){
-    return chi2 < 5.0;
-  }, "cut on chi2 in sts" );
-  proton_n.AddCut( "trEta", [](float eta){
-    return eta < 3.0;
-  }, "cut on eta for check" );
-  proton_n.AddHisto2D({{"trProtonY", 100, -0.5, 1.5}, {"trPt", 100, 0.0, 2.0}});
-  correction_task.AddVector(proton_n);
-
   std::cout << "Initialized" << std::endl;
 
   correction_task.Run();
